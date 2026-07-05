@@ -1,0 +1,160 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FiTwitter, FiInstagram, FiVideo, FiMessageSquare, FiExternalLink, FiClock } from 'react-icons/fi';
+import GlowCard from '../ui/GlowCard';
+
+// Reusable Platform Icon component
+const PlatformIcon = ({ platform }) => {
+  const normalized = platform?.toLowerCase() || '';
+  if (normalized.includes('twitter') || normalized.includes('x')) {
+    return <FiTwitter className="text-sky-400 h-4 w-4" />;
+  }
+  if (normalized.includes('instagram')) {
+    return <FiInstagram className="text-pink-400 h-4 w-4" />;
+  }
+  if (normalized.includes('tiktok') || normalized.includes('youtube') || normalized.includes('video')) {
+    return <FiVideo className="text-rose-400 h-4 w-4" />;
+  }
+  if (normalized.includes('reddit')) {
+    return <FiMessageSquare className="text-orange-400 h-4 w-4" />;
+  }
+  return <FiExternalLink className="text-slate-400 h-4 w-4" />;
+};
+
+const RecentTable = React.memo(({ analyses = [] }) => {
+  // Format dates
+  const formatDate = (dateString) => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      });
+    } catch (e) {
+      return dateString;
+    }
+  };
+
+  // Color-coded sentiment badges
+  const getSentimentStyles = (sentiment) => {
+    const term = sentiment?.toLowerCase() || '';
+    if (term.includes('pos')) {
+      return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+    }
+    if (term.includes('neg')) {
+      return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
+    }
+    return 'bg-slate-800/60 text-slate-300 border-slate-700/50';
+  };
+
+  // Color-coded risk labels
+  const getRiskColor = (score) => {
+    if (score >= 70) return 'text-rose-500';
+    if (score >= 30) return 'text-amber-400';
+    return 'text-emerald-400';
+  };
+
+  const getRiskBg = (score) => {
+    if (score >= 70) return 'bg-rose-500/10 border-rose-500/20';
+    if (score >= 30) return 'bg-amber-500/10 border-amber-500/20';
+    return 'bg-emerald-500/10 border-emerald-500/20';
+  };
+
+  if (!analyses || analyses.length === 0) {
+    return null;
+  }
+
+  return (
+    <GlowCard className="w-full">
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-sm font-semibold tracking-wide text-slate-200">
+          Recent Analyses Feed
+        </h4>
+        <Link 
+          to="/history" 
+          className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 hover:underline transition-all duration-150"
+        >
+          View Full History <FiExternalLink className="h-3 w-3" />
+        </Link>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="border-b border-slate-900 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+              <th className="py-3 px-4">Platform</th>
+              <th className="py-3 px-4">Category</th>
+              <th className="py-3 px-4">Sentiment</th>
+              <th className="py-3 px-4">Recom. Score</th>
+              <th className="py-3 px-4">Risk Severity</th>
+              <th className="py-3 px-4 text-right">Created Date</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-900/60 text-xs">
+            {analyses.map((item) => (
+              <tr 
+                key={item._id} 
+                className="text-slate-300 hover:bg-slate-900/15 transition-colors duration-150"
+              >
+                {/* Platform */}
+                <td className="py-3.5 px-4 font-medium">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-950 border border-slate-900">
+                      <PlatformIcon platform={item.platform} />
+                    </div>
+                    <span className="capitalize">{item.platform || 'General'}</span>
+                  </div>
+                </td>
+
+                {/* Category */}
+                <td className="py-3.5 px-4 text-slate-400">
+                  {item.category || 'Uncategorized'}
+                </td>
+
+                {/* Sentiment */}
+                <td className="py-3.5 px-4">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${getSentimentStyles(item.sentiment)}`}>
+                    {item.sentiment || 'Neutral'}
+                  </span>
+                </td>
+
+                {/* Recommendation Score */}
+                <td className="py-3.5 px-4 font-semibold">
+                  <div className="flex items-center gap-2">
+                    <span className="text-indigo-400 w-6 text-right">{item.recommendationScore ?? 0}</span>
+                    <div className="w-16 bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-900 hidden sm:block">
+                      <div 
+                        className="bg-indigo-500 h-full rounded-full" 
+                        style={{ width: `${item.recommendationScore ?? 0}%` }}
+                      />
+                    </div>
+                  </div>
+                </td>
+
+                {/* Risk Score */}
+                <td className="py-3.5 px-4">
+                  <span className={`px-2.5 py-0.5 rounded-[4px] font-semibold border text-[10px] ${getRiskBg(item.riskScore ?? 0)} ${getRiskColor(item.riskScore ?? 0)}`}>
+                    {item.riskScore ?? 0}% Risk
+                  </span>
+                </td>
+
+                {/* Created Date */}
+                <td className="py-3.5 px-4 text-right text-slate-500 font-medium">
+                  <div className="flex items-center justify-end gap-1.5">
+                    <FiClock className="h-3 w-3 text-slate-650" />
+                    {formatDate(item.createdAt)}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </GlowCard>
+  );
+});
+
+RecentTable.displayName = 'RecentTable';
+
+export default RecentTable;
