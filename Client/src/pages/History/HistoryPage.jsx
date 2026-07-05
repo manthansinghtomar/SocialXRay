@@ -1,11 +1,22 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
+import { useNotifications } from '../../context/NotificationContext';
 import { 
   FiSearch, FiTrash2, FiFileText, FiAlertTriangle, FiCpu, 
   FiGlobe, FiClock, FiExternalLink, FiBarChart2, FiCheckCircle, 
   FiEye, FiTrendingUp, FiActivity, FiTag, FiKey, FiCornerDownRight 
 } from 'react-icons/fi';
+import { 
+  FaInstagram, 
+  FaFacebook, 
+  FaYoutube, 
+  FaLinkedin, 
+  FaTiktok, 
+  FaReddit,
+  FaTwitter,
+  FaGlobe
+} from 'react-icons/fa';
 
 import api from '../../services/api';
 
@@ -16,10 +27,23 @@ import CyberButton from '../../components/ui/CyberButton';
 const PLATFORMS = ['Instagram', 'Facebook', 'YouTube', 'X', 'LinkedIn', 'TikTok', 'Reddit', 'Other'];
 const SENTIMENTS = ['Positive', 'Neutral', 'Negative', 'Pending'];
 
+const getPlatformIcon = (platform, sizeClass = 'h-4 w-4') => {
+  const name = platform?.toLowerCase() || '';
+  if (name.includes('instagram')) return <FaInstagram className={`${sizeClass} text-pink-500`} />;
+  if (name.includes('facebook')) return <FaFacebook className={`${sizeClass} text-blue-600`} />;
+  if (name.includes('youtube')) return <FaYoutube className={`${sizeClass} text-red-600`} />;
+  if (name.includes('linkedin')) return <FaLinkedin className={`${sizeClass} text-sky-500`} />;
+  if (name.includes('tiktok')) return <FaTiktok className={`${sizeClass} text-rose-500`} />;
+  if (name.includes('reddit')) return <FaReddit className={`${sizeClass} text-orange-500`} />;
+  if (name === 'x' || name.includes('twitter')) return <FaTwitter className={`${sizeClass} text-slate-200`} />;
+  return <FaGlobe className={`${sizeClass} text-slate-400`} />;
+};
+
 const HistoryPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [analyses, setAnalyses] = useState([]);
+  const { addNotification } = useNotifications();
 
   // Filter/Sort States
   const [searchQuery, setSearchQuery] = useState('');
@@ -66,6 +90,14 @@ const HistoryPage = () => {
         toast.success('Analysis record purged successfully.');
         setAnalyses((prev) => prev.filter((item) => item._id !== id));
         setDeletingId(null);
+        
+        // Trigger notification
+        addNotification(
+          'Analysis Purged',
+          `Successfully deleted scan entry with ID: ${id}.`,
+          'info',
+          'trash'
+        );
       } else {
         toast.error('Failed to delete analysis.');
       }
@@ -291,8 +323,9 @@ const HistoryPage = () => {
                 {/* Card Top Row */}
                 <div className="flex items-center justify-between border-b border-slate-900 pb-3.5">
                   <div className="flex items-center gap-2.5">
+                    {getPlatformIcon(item.platform)}
                     <span className="text-sm font-bold text-slate-200 uppercase">{item.platform}</span>
-                    <span className="text-xs text-slate-550">•</span>
+                    <span className="text-xs text-slate-555">•</span>
                     <span className="text-xs text-slate-500 font-mono font-semibold">{item.category}</span>
                   </div>
                   <span className={`px-2.5 py-0.5 rounded text-[11px] font-bold border ${getSentimentStyles(item.sentiment)}`}>
@@ -406,9 +439,14 @@ const HistoryPage = () => {
                   </span>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     {/* Platform */}
-                    <div className="bg-slate-900/20 border border-slate-900 rounded-lg p-4">
-                      <span className="text-[11px] uppercase text-slate-500 font-bold">Feed Platform</span>
-                      <p className="text-sm font-bold text-slate-300 mt-1.5 capitalize">{selectedAnalysis.platform}</p>
+                    <div className="bg-slate-900/20 border border-slate-900 rounded-lg p-4 flex items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-950 border border-slate-900">
+                        {getPlatformIcon(selectedAnalysis.platform, 'h-5 w-5')}
+                      </div>
+                      <div>
+                        <span className="text-[11px] uppercase text-slate-500 font-bold">Feed Platform</span>
+                        <p className="text-sm font-bold text-slate-300 mt-1 capitalize">{selectedAnalysis.platform}</p>
+                      </div>
                     </div>
 
                     {/* Category & Sentiment */}

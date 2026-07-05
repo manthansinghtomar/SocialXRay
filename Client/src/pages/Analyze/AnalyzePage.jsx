@@ -3,10 +3,21 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
+import { useNotifications } from '../../context/NotificationContext';
 import { 
   FiCpu, FiSend, FiLoader, FiCheckCircle, FiAlertTriangle, FiArrowLeft, 
   FiBarChart2, FiMessageSquare, FiClock, FiFileText, FiTag, FiKey 
 } from 'react-icons/fi';
+import { 
+  FaInstagram, 
+  FaFacebook, 
+  FaYoutube, 
+  FaLinkedin, 
+  FaTiktok, 
+  FaReddit,
+  FaTwitter,
+  FaGlobe
+} from 'react-icons/fa';
 
 import api from '../../services/api';
 
@@ -25,11 +36,24 @@ const PLATFORMS = [
   'Other'
 ];
 
+const getPlatformIcon = (platform) => {
+  const name = platform?.toLowerCase() || '';
+  if (name.includes('instagram')) return <FaInstagram className="h-6 w-6 text-pink-500" />;
+  if (name.includes('facebook')) return <FaFacebook className="h-6 w-6 text-blue-600" />;
+  if (name.includes('youtube')) return <FaYoutube className="h-6 w-6 text-red-600" />;
+  if (name.includes('linkedin')) return <FaLinkedin className="h-6 w-6 text-sky-500" />;
+  if (name.includes('tiktok')) return <FaTiktok className="h-6 w-6 text-rose-500" />;
+  if (name.includes('reddit')) return <FaReddit className="h-6 w-6 text-orange-500" />;
+  if (name === 'x') return <FaTwitter className="h-6 w-6 text-slate-200" />;
+  return <FaGlobe className="h-6 w-6 text-indigo-400" />;
+};
+
 const AnalyzePage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [result, setResult] = useState(null);
+  const { addNotification } = useNotifications();
 
   const {
     register,
@@ -61,8 +85,42 @@ const AnalyzePage = () => {
       });
 
       if (response.data && response.data.success) {
-        setResult(response.data.data);
+        const resultData = response.data.data;
+        setResult(resultData);
         toast.success('AI algorithm analysis completed successfully!');
+        
+        // Trigger real notifications
+        addNotification(
+          'Analysis Complete',
+          `Successfully scanned post for platform: ${resultData.platform || 'General'}.`,
+          'success',
+          'check'
+        );
+
+        if (resultData.riskScore > 60) {
+          addNotification(
+            'High Risk Detected',
+            `Content risk score is ${resultData.riskScore}% which exceeds safety threshold.`,
+            'error',
+            'alert'
+          );
+        }
+
+        if (resultData.analysisSource === 'Gemini AI') {
+          addNotification(
+            'Gemini AI Engine Active',
+            'Audit scanned successfully using Google Gemini Flash model.',
+            'success',
+            'cpu'
+          );
+        } else {
+          addNotification(
+            'Rule-Based Fallback Active',
+            'Gemini API offline. Local rule mapping evaluated safety parameters.',
+            'warning',
+            'cpu'
+          );
+        }
       } else {
         setError('Analysis returned an unexpected response status.');
       }
@@ -74,6 +132,14 @@ const AnalyzePage = () => {
         setError(err.response.data?.error || 'Failed to complete algorithm analysis.');
       }
       toast.error('Diagnostic scan failed.');
+      
+      // Log warning fallback notification on total failure
+      addNotification(
+        'Rule-Based Fallback Active',
+        'Gemini API offline. Local rule mapping evaluated safety parameters.',
+        'warning',
+        'cpu'
+      );
     } finally {
       setLoading(false);
     }
@@ -172,12 +238,12 @@ const AnalyzePage = () => {
           className="space-y-8"
         >
           {/* Main Results card */}
-          <GlowCard className="space-y-7">
+          <GlowCard>
             {/* Header info */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-900 pb-5 gap-4">
               <div className="flex items-center gap-3.5">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-extrabold uppercase text-sm">
-                  {result.platform?.substring(0, 3) || 'Gen'}
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 border border-slate-850 shadow-inner">
+                  {getPlatformIcon(result.platform)}
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-slate-200">Algorithmic Scan Complete</h3>
@@ -195,7 +261,7 @@ const AnalyzePage = () => {
             </div>
 
             {/* Averages Score Grid */}
-            <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
+            <div className="grid grid-cols-2 mt-4 gap-5 sm:grid-cols-4">
               {/* Engagement Score */}
               <div className="bg-slate-950/40 border border-slate-900/80 rounded-lg p-5 flex flex-col justify-between">
                 <span className="text-xs font-bold uppercase text-slate-500 tracking-wider">Engagement</span>
@@ -246,7 +312,7 @@ const AnalyzePage = () => {
 
             {/* AI Summary Section */}
             <div className="space-y-3">
-              <div className="flex items-center gap-2 text-sm font-bold text-slate-350 uppercase tracking-wider">
+              <div className="flex items-center gap-2 mt-4 text-sm font-bold text-slate-350 uppercase tracking-wider">
                 <FiFileText className="h-5 w-5 text-indigo-400" />
                 AI Summary
               </div>
@@ -256,10 +322,10 @@ const AnalyzePage = () => {
             </div>
 
             {/* Score Explanation Split Columns */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-1">
+            <div className="grid grid-cols- mb-4 md:grid-cols-2 gap-6 pt-1">
               {/* Recommendation Reason */}
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-sm font-bold text-slate-350 uppercase tracking-wider">
+                <div className="flex items-center gap-2 mt-4 text-sm font-bold text-slate-350 uppercase tracking-wider">
                   <FiCheckCircle className="h-5 w-5 text-cyan-400" />
                   Recommendation Reason
                 </div>
@@ -270,7 +336,7 @@ const AnalyzePage = () => {
 
               {/* Risk Explanation */}
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-sm font-bold text-slate-350 uppercase tracking-wider">
+                <div className="flex items-center gap-2 mt-4 text-sm font-bold text-slate-350 uppercase tracking-wider">
                   <FiAlertTriangle className="h-5 w-5 text-rose-500" />
                   Risk Explanation
                 </div>

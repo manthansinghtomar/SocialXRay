@@ -110,6 +110,32 @@ const AnalysisSchema = new mongoose.Schema(
             type: [String],
             default: []
         },
+        transparencyScore: {
+            type: Number,
+            min: [0, "Transparency score cannot be negative"],
+            max: [100, "Transparency score cannot exceed 100"],
+            default: 0
+        },
+        reachPrediction: {
+            type: String,
+            enum: {
+                values: ["Low", "Medium", "High"],
+                message: "{VALUE} is not a valid reach prediction"
+            },
+            default: "Medium"
+        },
+        contentStrengths: {
+            type: [String],
+            default: []
+        },
+        contentWeaknesses: {
+            type: [String],
+            default: []
+        },
+        improvementSuggestions: {
+            type: [String],
+            default: []
+        },
         analysisSource: {
             type: String,
             required: [true, "Analysis source is required"],

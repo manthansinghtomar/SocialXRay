@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiMenu, FiX, FiShield } from 'react-icons/fi';
 import CyberButton from '../ui/CyberButton';
+import Logo from './Logo';
 
 const LandingNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,8 +19,8 @@ const LandingNavbar = () => {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo Branding */}
-          <div className="flex items-center gap-2.5 select-none">
-            <FiShield className="h-6 w-6 text-indigo-500 animate-pulse" />
+          <div className="flex items-center gap-3 select-none">
+            <Logo className="h-9 w-9" />
             <span className="text-lg font-extrabold tracking-tight text-slate-100">
               Social<span className="text-indigo-400">XRay</span>
             </span>

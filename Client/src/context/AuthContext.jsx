@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import api from '../services/api';
+import { useNotifications } from './NotificationContext';
 
 const AuthContext = createContext(null);
 
@@ -7,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(!!localStorage.getItem('token'));
+  const { addNotification } = useNotifications();
 
   // Load user session on app load
   useEffect(() => {
@@ -38,10 +40,22 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
     setToken(tokenVal);
     localStorage.setItem('token', tokenVal);
+    addNotification(
+      'Security Session Initialized',
+      `Signed in successfully as ${userData?.email || 'XRay Researcher'}.`,
+      'success',
+      'user'
+    );
   };
 
   // Ready-to-integrate logout placeholder
   const logout = () => {
+    addNotification(
+      'Session Terminated',
+      'Cleared authorization credentials and signed out.',
+      'info',
+      'user'
+    );
     setUser(null);
     setToken(null);
     localStorage.removeItem('token');

@@ -3,9 +3,10 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import { FiMail, FiLock, FiEye, FiEyeOff, FiLoader, FiShield } from 'react-icons/fi';
+import { FiMail, FiLock, FiEye, FiEyeOff, FiLoader } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
+import Logo from '../../components/common/Logo';
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -72,7 +73,7 @@ const LoginPage = () => {
         <div className="flex flex-col items-center text-center mb-8">
           <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 p-0.5 shadow-[0_0_20px_rgba(99,102,241,0.3)]">
             <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-slate-950">
-              <FiShield className="h-7 w-7 text-indigo-400 animate-pulse" />
+              <Logo className="h-10 w-10" />
             </div>
           </div>
           <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white">

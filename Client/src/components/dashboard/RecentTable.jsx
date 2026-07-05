@@ -1,24 +1,43 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiTwitter, FiInstagram, FiVideo, FiMessageSquare, FiExternalLink, FiClock } from 'react-icons/fi';
+import { 
+  FaInstagram, 
+  FaFacebook, 
+  FaYoutube, 
+  FaLinkedin, 
+  FaTiktok, 
+  FaReddit,
+  FaTwitter,
+  FaGlobe
+} from 'react-icons/fa';
 import GlowCard from '../ui/GlowCard';
 
 // Reusable Platform Icon component
 const PlatformIcon = ({ platform }) => {
   const normalized = platform?.toLowerCase() || '';
   if (normalized.includes('twitter') || normalized.includes('x')) {
-    return <FiTwitter className="text-sky-400 h-4 w-4" />;
+    return <FaTwitter className="text-slate-200 h-4 w-4" />;
   }
   if (normalized.includes('instagram')) {
-    return <FiInstagram className="text-pink-400 h-4 w-4" />;
+    return <FaInstagram className="text-pink-500 h-4 w-4" />;
   }
-  if (normalized.includes('tiktok') || normalized.includes('youtube') || normalized.includes('video')) {
-    return <FiVideo className="text-rose-400 h-4 w-4" />;
+  if (normalized.includes('facebook')) {
+    return <FaFacebook className="text-blue-600 h-4 w-4" />;
+  }
+  if (normalized.includes('linkedin')) {
+    return <FaLinkedin className="text-sky-500 h-4 w-4" />;
+  }
+  if (normalized.includes('youtube')) {
+    return <FaYoutube className="text-red-600 h-4 w-4" />;
+  }
+  if (normalized.includes('tiktok')) {
+    return <FaTiktok className="text-rose-500 h-4 w-4" />;
   }
   if (normalized.includes('reddit')) {
-    return <FiMessageSquare className="text-orange-400 h-4 w-4" />;
+    return <FaReddit className="text-orange-500 h-4 w-4" />;
   }
-  return <FiExternalLink className="text-slate-400 h-4 w-4" />;
+  return <FaGlobe className="text-slate-400 h-4 w-4" />;
 };
 
 const RecentTable = React.memo(({ analyses = [] }) => {

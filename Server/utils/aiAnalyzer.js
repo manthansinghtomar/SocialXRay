@@ -6,6 +6,46 @@
  */
 
 /**
+ * Safe JSON parser that cleans up markdown code blocks or extra text enclosing the JSON
+ * @param {string} text - Raw model response
+ * @returns {object} Parsed JSON object
+ */
+const safeJsonParse = (text) => {
+    let cleanText = text.trim();
+    
+    // Check if the text starts with markdown code block formatting
+    if (cleanText.startsWith("```")) {
+        const matchStart = cleanText.match(/^```(?:json)?\s*/i);
+        if (matchStart) {
+            cleanText = cleanText.slice(matchStart[0].length);
+        }
+        
+        // Remove trailing ```
+        if (cleanText.endsWith("```")) {
+            cleanText = cleanText.slice(0, -3).trim();
+        }
+    }
+    
+    // Try to parse cleanText
+    try {
+        return JSON.parse(cleanText);
+    } catch (e) {
+        // If it still fails, try to extract first '{' and last '}'
+        const firstBrace = cleanText.indexOf('{');
+        const lastBrace = cleanText.lastIndexOf('}');
+        if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+            const possibleJson = cleanText.substring(firstBrace, lastBrace + 1);
+            try {
+                return JSON.parse(possibleJson);
+            } catch (innerError) {
+                throw new Error(`JSON parsing failed: ${e.message}. Extract attempt failed: ${innerError.message}. CleanText: ${cleanText}`);
+            }
+        }
+        throw new Error(`JSON parsing failed: ${e.message}. CleanText: ${cleanText}`);
+    }
+};
+
+/**
  * Local Rule-Based Analyzer (Fallback Engine)
  * Runs completely locally with zero internet dependencies.
  * 
@@ -85,6 +125,28 @@ const localRuleBasedAnalyzer = (postText, scores) => {
         riskExplanation = `Low risk level (${rScore}/100). Post complies with search standards and does not trigger any standard policy or clickbait flags.`;
     }
 
+    // 7. Sourcing new metrics
+    const transparencyScore = Math.max(0, 105 - rScore);
+    const reachPrediction = recScore >= 70 ? "High" : (recScore >= 40 ? "Medium" : "Low");
+
+    const contentStrengths = [
+        "Clear vocabulary selection and contextual structure.",
+        "Strong formatting style consistent with category themes.",
+        "Solid alignment with standard community distribution metrics."
+    ];
+
+    const contentWeaknesses = [
+        "Limited explicit call-to-action indicators in content body.",
+        "Minimal visual anchor cues or contextual tags.",
+        "Potential vulnerability to algorithm propagation filters."
+    ];
+
+    const improvementSuggestions = [
+        "Add 1-2 platform specific search hashtags.",
+        "Include a direct question to prompt user discussion.",
+        "Integrate dynamic interaction hooks (e.g. comment callout)."
+    ];
+
     return {
         sentiment,
         category,
@@ -92,6 +154,11 @@ const localRuleBasedAnalyzer = (postText, scores) => {
         aiSummary,
         detectedKeywords: detectedKeywords.length > 0 ? detectedKeywords : ["General"],
         riskExplanation,
+        transparencyScore,
+        reachPrediction,
+        contentStrengths,
+        contentWeaknesses,
+        improvementSuggestions,
         analysisSource: "Rule-Based AI"
     };
 };
@@ -110,10 +177,10 @@ const geminiAnalyzerAdapter = async (postText, scores) => {
         throw new Error("Missing GEMINI_API_KEY in environment configuration.");
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
     const prompt = `
-You are a senior social media algorithm consultant. Analyze the following post text and evaluate its performance scores.
+You are a social media algorithm auditing consultant. Analyze the following post content text and evaluate its metrics.
 Output a JSON response that complies EXACTLY with the schema below. Do not include markdown formatting or tags like \`\`\`json in the response. Return raw JSON text only.
 
 Required Schema:
@@ -123,7 +190,12 @@ Required Schema:
   "recommendationReason": "string (1-2 sentences explaining recommendation potential based on recommendationScore: ${scores.recommendationScore} and viralityScore: ${scores.viralityScore})",
   "aiSummary": "string (1 sentence summary of the post)",
   "detectedKeywords": ["string", "string", ... (3 to 5 key terms extracted from the text)],
-  "riskExplanation": "string (1 sentence explaining why this post received a riskScore of ${scores.riskScore} out of 100)"
+  "riskExplanation": "string (1 sentence explaining why this post received a riskScore of ${scores.riskScore} out of 100)",
+  "transparencyScore": number (0 to 100 based on content clarity and lack of hidden manipulation or clickbait),
+  "reachPrediction": "Low" | "Medium" | "High",
+  "contentStrengths": ["string", "string", "string" (exactly 3 bullet points highlighting positive aspects)],
+  "contentWeaknesses": ["string", "string", "string" (exactly 3 bullet points highlighting areas of improvement or policy risks)],
+  "improvementSuggestions": ["string", "string", "string" (exactly 3 actionable recommendations to improve performance)]
 }
 
 Post Content to Analyze:
@@ -148,8 +220,15 @@ Post Content to Analyze:
     }
 
     const json = await response.json();
+    
+    // Log the complete Gemini API response before parsing
+    console.log("[AI Analyzer] Raw Gemini API Response JSON:", JSON.stringify(json, null, 2));
+
     const responseText = json.candidates[0].content.parts[0].text;
-    const parsed = JSON.parse(responseText.trim());
+    console.log("[AI Analyzer] Raw responseText extracted:", responseText);
+
+    const parsed = safeJsonParse(responseText);
+    console.log("[AI Analyzer] Parsed JSON Successfully:", JSON.stringify(parsed, null, 2));
 
     return {
         sentiment: parsed.sentiment || "Neutral",
@@ -158,6 +237,11 @@ Post Content to Analyze:
         aiSummary: parsed.aiSummary || postText.slice(0, 100),
         detectedKeywords: Array.isArray(parsed.detectedKeywords) ? parsed.detectedKeywords : ["General"],
         riskExplanation: parsed.riskExplanation || "Evaluated content parameters for compliance.",
+        transparencyScore: typeof parsed.transparencyScore === 'number' ? parsed.transparencyScore : 75,
+        reachPrediction: ["Low", "Medium", "High"].includes(parsed.reachPrediction) ? parsed.reachPrediction : "Medium",
+        contentStrengths: Array.isArray(parsed.contentStrengths) && parsed.contentStrengths.length === 3 ? parsed.contentStrengths : ["Clear theme alignment", "Direct audience messaging", "Natural vocabulary flow"],
+        contentWeaknesses: Array.isArray(parsed.contentWeaknesses) && parsed.contentWeaknesses.length === 3 ? parsed.contentWeaknesses : ["Limited engagement hooks", "Minimal keyword depth", "Unoptimized hashtags placement"],
+        improvementSuggestions: Array.isArray(parsed.improvementSuggestions) && parsed.improvementSuggestions.length === 3 ? parsed.improvementSuggestions : ["Include a direct question", "Add context-appropriate tags", "Enhance emotional vocabulary cues"],
         analysisSource: "Gemini AI"
     };
 };
@@ -171,16 +255,34 @@ Post Content to Analyze:
  * @returns {Promise<object>} Unified analysis output
  */
 const analyzePostContent = async (postText, scores) => {
-    try {
-        if (process.env.GEMINI_API_KEY) {
-            return await geminiAnalyzerAdapter(postText, scores);
-        }
-    } catch (error) {
-        console.warn(`[AI Analyzer] Gemini API failed: ${error.message}. Redirecting to local rule-based fallback...`);
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+        console.warn("[AI Analyzer] Warning: GEMINI_API_KEY is missing in environment. Automatically falling back to local Rule-Based AI.");
+        const fallbackResult = localRuleBasedAnalyzer(postText, scores);
+        console.log(`[AI Analyzer] Analysis source used: ${fallbackResult.analysisSource}`);
+        return fallbackResult;
     }
 
-    // Default guaranteed local fallback
-    return localRuleBasedAnalyzer(postText, scores);
+    // Attempt with retry-once policy
+    let attempts = 0;
+    while (attempts < 2) {
+        try {
+            attempts++;
+            const result = await geminiAnalyzerAdapter(postText, scores);
+            console.log(`[AI Analyzer] Analysis source used: ${result.analysisSource} (Attempt ${attempts} successful)`);
+            return result;
+        } catch (error) {
+            console.warn(`[AI Analyzer] Gemini API failed on attempt ${attempts}. Error Details: ${error.stack || error.message}`);
+            if (attempts === 1) {
+                console.log("[AI Analyzer] Retrying Gemini API call once...");
+            }
+        }
+    }
+
+    console.warn("[AI Analyzer] Gemini API calls failed after retry. Automatically falling back to local Rule-Based AI.");
+    const fallbackResult = localRuleBasedAnalyzer(postText, scores);
+    console.log(`[AI Analyzer] Analysis source used: ${fallbackResult.analysisSource}`);
+    return fallbackResult;
 };
 
 module.exports = {

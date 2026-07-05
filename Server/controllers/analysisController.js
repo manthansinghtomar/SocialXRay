@@ -72,6 +72,11 @@ exports.analyzePost = asyncHandler(async (req, res, next) => {
         aiSummary: aiAnalysis.aiSummary,
         riskExplanation: aiAnalysis.riskExplanation,
         detectedKeywords: aiAnalysis.detectedKeywords,
+        transparencyScore: aiAnalysis.transparencyScore || 0,
+        reachPrediction: aiAnalysis.reachPrediction || "Medium",
+        contentStrengths: aiAnalysis.contentStrengths || [],
+        contentWeaknesses: aiAnalysis.contentWeaknesses || [],
+        improvementSuggestions: aiAnalysis.improvementSuggestions || [],
         analysisSource: aiAnalysis.analysisSource,
         createdBy: req.user.id
     });

@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { FiLogOut, FiX } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import { navigationItems } from '../../constants/navigation';
+import Logo from '../common/Logo';
 
 const Sidebar = ({ isOpen, onClose }) => {
   const { logout } = useAuth();
@@ -26,8 +27,8 @@ const Sidebar = ({ isOpen, onClose }) => {
       >
         {/* Header Branding */}
         <div className="flex h-20 items-center justify-between px-6 border-b border-slate-900">
-          <div className="flex items-center gap-2">
-            <div className="h-5 w-5 rounded bg-gradient-to-tr from-indigo-500 to-cyan-400 shadow-md shadow-indigo-500/20" />
+          <div className="flex items-center gap-2.5">
+            <Logo className="h-9 w-9" />
             <span className="text-lg font-extrabold tracking-tight text-white">
               SocialXRay
             </span>
