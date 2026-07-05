@@ -29,14 +29,14 @@ const WhySection = () => {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="text-center space-y-3 mb-16">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-400">
+        <div className="text-center space-y-4 mb-16">
+          <h2 className="text-sm font-bold uppercase tracking-widest text-indigo-400">
             Platform Mission
           </h2>
-          <p className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+          <p className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
             Why Algorithmic Transparency Matters
           </p>
-          <p className="mx-auto max-w-lg text-xs text-slate-400">
+          <p className="mx-auto max-w-xl text-base text-slate-400 leading-relaxed">
             Hidden filters and silent moderation guidelines dictate who hears your voice. Take control of your distribution.
           </p>
         </div>
@@ -47,12 +47,12 @@ const WhySection = () => {
             const Icon = point.icon;
             return (
               <GlowCard key={point.title} delay={index * 0.1}>
-                <div className="flex flex-col h-full space-y-4">
-                  <div className={`flex h-10 w-10 items-center justify-center rounded-lg border ${point.color}`}>
-                    <Icon className="h-5 w-5" />
+                <div className="flex flex-col h-full space-y-5">
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-lg border ${point.color}`}>
+                    <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="text-sm font-semibold text-slate-200">{point.title}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed flex-1">
+                  <h3 className="text-lg font-bold text-slate-200">{point.title}</h3>
+                  <p className="text-base text-slate-400 leading-relaxed flex-1">
                     {point.description}
                   </p>
                 </div>

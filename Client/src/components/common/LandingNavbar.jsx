@@ -16,11 +16,11 @@ const LandingNavbar = () => {
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-slate-900/60 bg-slate-950/80 backdrop-blur-md">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-20 items-center justify-between">
           {/* Logo Branding */}
-          <div className="flex items-center gap-2 select-none">
-            <FiShield className="h-5 w-5 text-indigo-500 animate-pulse" />
-            <span className="text-sm font-bold tracking-tight text-slate-100">
+          <div className="flex items-center gap-2.5 select-none">
+            <FiShield className="h-6 w-6 text-indigo-500 animate-pulse" />
+            <span className="text-lg font-extrabold tracking-tight text-slate-100">
               Social<span className="text-indigo-400">XRay</span>
             </span>
           </div>
@@ -31,7 +31,7 @@ const LandingNavbar = () => {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-xs font-medium text-slate-400 hover:text-slate-200 transition-colors duration-200"
+                className="text-base font-semibold text-slate-400 hover:text-slate-200 transition-colors duration-200"
               >
                 {link.label}
               </a>
@@ -41,7 +41,7 @@ const LandingNavbar = () => {
           {/* Action Sign In */}
           <div className="hidden md:flex items-center">
             <Link to="/login">
-              <CyberButton variant="secondary" className="!px-4 !py-1.5 text-[10px]">
+              <CyberButton variant="secondary" className="!px-5 !py-2.5 text-sm">
                 Sign In
               </CyberButton>
             </Link>
@@ -51,10 +51,10 @@ const LandingNavbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen((prev) => !prev)}
-              className="inline-flex items-center justify-center rounded-lg p-1.5 text-slate-400 hover:bg-slate-900 hover:text-slate-200 transition-colors"
+              className="inline-flex items-center justify-center rounded-lg p-2.5 text-slate-400 hover:bg-slate-900 hover:text-slate-200 transition-colors"
               aria-label="Toggle menu"
             >
-              {isOpen ? <FiX className="h-5 w-5" /> : <FiMenu className="h-5 w-5" />}
+              {isOpen ? <FiX className="h-6 w-6" /> : <FiMenu className="h-6 w-6" />}
             </button>
           </div>
         </div>
@@ -62,20 +62,20 @@ const LandingNavbar = () => {
 
       {/* Mobile Drawer Panel */}
       {isOpen && (
-        <div className="md:hidden border-t border-slate-900/80 bg-slate-950 px-4 py-4 space-y-2.5 animate-fadeIn">
+        <div className="md:hidden border-t border-slate-900/80 bg-slate-950 px-5 py-5 space-y-3.5 animate-fadeIn">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
               onClick={() => setIsOpen(false)}
-              className="block text-xs font-medium text-slate-400 hover:text-slate-250 py-1.5 transition-colors"
+              className="block text-base font-semibold text-slate-400 hover:text-slate-250 py-2.5 transition-colors"
             >
               {link.label}
             </a>
           ))}
-          <div className="pt-3 border-t border-slate-900">
+          <div className="pt-4 border-t border-slate-900">
             <Link to="/login" onClick={() => setIsOpen(false)}>
-              <CyberButton variant="secondary" className="w-full text-center py-2 text-xs">
+              <CyberButton variant="secondary" className="w-full text-center py-3.5 text-base">
                 Sign In
               </CyberButton>
             </Link>

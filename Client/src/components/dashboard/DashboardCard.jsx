@@ -37,22 +37,22 @@ const DashboardCard = ({
     >
       <div onClick={onClick} className="flex flex-col h-full justify-between">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <span className="text-sm font-bold uppercase tracking-wider text-slate-400">
             {title}
           </span>
           {Icon && (
-            <div className={`p-2 rounded-lg bg-slate-900/80 border border-slate-800 ${isClickable ? 'group-hover:text-indigo-400 group-hover:border-indigo-500/30' : ''} text-slate-400 transition-colors duration-300`}>
-              <Icon className="h-4.5 w-4.5" />
+            <div className={`p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 ${isClickable ? 'group-hover:text-indigo-400 group-hover:border-indigo-500/30' : ''} text-slate-400 transition-colors duration-300`}>
+              <Icon className="h-5 w-5" />
             </div>
           )}
         </div>
 
         <div>
-          <h3 className="text-2xl font-bold tracking-tight text-white mb-2">
+          <h3 className="text-3xl font-extrabold tracking-tight text-white mb-2.5">
             {value}
           </h3>
           {trend && (
-            <div className="flex items-center gap-1 text-[11px] font-medium">
+            <div className="flex items-center gap-1.5 text-xs font-semibold">
               <span className={getTrendColor()}>{trend}</span>
               <span className="text-slate-500">vs historical baseline</span>
             </div>

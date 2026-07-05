@@ -19,12 +19,12 @@ const SupportedPlatforms = () => {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         
         {/* Title */}
-        <p className="text-center text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-8">
+        <p className="text-center text-sm font-bold uppercase tracking-widest text-slate-500 mb-10">
           SUPPORTED PLATFORM ALGORITHMS
         </p>
 
         {/* Badge Grid */}
-        <div className="flex flex-wrap justify-center items-center gap-4">
+        <div className="flex flex-wrap justify-center items-center gap-5">
           {platforms.map((platform, index) => {
             const Icon = platform.icon;
             return (
@@ -34,9 +34,9 @@ const SupportedPlatforms = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
-                className={`flex items-center gap-2 rounded-lg border border-slate-900 bg-slate-950/30 px-4 py-2 text-xs font-semibold text-slate-400 cursor-default transition-all duration-300 ${platform.color}`}
+                className={`flex items-center gap-3 rounded-lg border border-slate-900 bg-slate-950/30 px-6 py-3.5 text-base font-semibold text-slate-400 cursor-default transition-all duration-300 ${platform.color}`}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-5 w-5" />
                 {platform.name}
               </motion.div>
             );

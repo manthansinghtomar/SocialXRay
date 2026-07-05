@@ -67,40 +67,40 @@ const RecentTable = React.memo(({ analyses = [] }) => {
 
   return (
     <GlowCard className="w-full">
-      <div className="flex items-center justify-between mb-4">
-        <h4 className="text-sm font-semibold tracking-wide text-slate-200">
+      <div className="flex items-center justify-between mb-5">
+        <h4 className="text-base font-bold tracking-wide text-slate-200">
           Recent Analyses Feed
         </h4>
         <Link 
           to="/history" 
-          className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 hover:underline transition-all duration-150"
+          className="text-sm text-indigo-400 hover:text-indigo-300 flex items-center gap-1.5 hover:underline transition-all duration-150"
         >
-          View Full History <FiExternalLink className="h-3 w-3" />
+          View Full History <FiExternalLink className="h-4 w-4" />
         </Link>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-slate-900 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-              <th className="py-3 px-4">Platform</th>
-              <th className="py-3 px-4">Category</th>
-              <th className="py-3 px-4">Sentiment</th>
-              <th className="py-3 px-4">Recom. Score</th>
-              <th className="py-3 px-4">Risk Severity</th>
-              <th className="py-3 px-4 text-right">Created Date</th>
+            <tr className="border-b border-slate-900 text-xs font-bold uppercase tracking-wider text-slate-500">
+              <th className="py-4 px-5">Platform</th>
+              <th className="py-4 px-5">Category</th>
+              <th className="py-4 px-5">Sentiment</th>
+              <th className="py-4 px-5">Recom. Score</th>
+              <th className="py-4 px-5">Risk Severity</th>
+              <th className="py-4 px-5 text-right">Created Date</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-900/60 text-xs">
+          <tbody className="divide-y divide-slate-900/60 text-sm">
             {analyses.map((item) => (
               <tr 
                 key={item._id} 
                 className="text-slate-300 hover:bg-slate-900/15 transition-colors duration-150"
               >
                 {/* Platform */}
-                <td className="py-3.5 px-4 font-medium">
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-950 border border-slate-900">
+                <td className="py-4.5 px-5 font-semibold">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-950 border border-slate-900">
                       <PlatformIcon platform={item.platform} />
                     </div>
                     <span className="capitalize">{item.platform || 'General'}</span>
@@ -108,22 +108,22 @@ const RecentTable = React.memo(({ analyses = [] }) => {
                 </td>
 
                 {/* Category */}
-                <td className="py-3.5 px-4 text-slate-400">
+                <td className="py-4.5 px-5 text-slate-400">
                   {item.category || 'Uncategorized'}
                 </td>
 
                 {/* Sentiment */}
-                <td className="py-3.5 px-4">
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${getSentimentStyles(item.sentiment)}`}>
+                <td className="py-4.5 px-5">
+                  <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold border ${getSentimentStyles(item.sentiment)}`}>
                     {item.sentiment || 'Neutral'}
                   </span>
                 </td>
 
                 {/* Recommendation Score */}
-                <td className="py-3.5 px-4 font-semibold">
-                  <div className="flex items-center gap-2">
+                <td className="py-4.5 px-5 font-bold">
+                  <div className="flex items-center gap-2.5">
                     <span className="text-indigo-400 w-6 text-right">{item.recommendationScore ?? 0}</span>
-                    <div className="w-16 bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-900 hidden sm:block">
+                    <div className="w-16 bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-900 hidden sm:block">
                       <div 
                         className="bg-indigo-500 h-full rounded-full" 
                         style={{ width: `${item.recommendationScore ?? 0}%` }}
@@ -133,16 +133,16 @@ const RecentTable = React.memo(({ analyses = [] }) => {
                 </td>
 
                 {/* Risk Score */}
-                <td className="py-3.5 px-4">
-                  <span className={`px-2.5 py-0.5 rounded-[4px] font-semibold border text-[10px] ${getRiskBg(item.riskScore ?? 0)} ${getRiskColor(item.riskScore ?? 0)}`}>
+                <td className="py-4.5 px-5">
+                  <span className={`px-2.5 py-0.5 rounded-[4px] font-bold border text-[10px] ${getRiskBg(item.riskScore ?? 0)} ${getRiskColor(item.riskScore ?? 0)}`}>
                     {item.riskScore ?? 0}% Risk
                   </span>
                 </td>
 
                 {/* Created Date */}
-                <td className="py-3.5 px-4 text-right text-slate-500 font-medium">
+                <td className="py-4.5 px-5 text-right text-slate-500 font-semibold">
                   <div className="flex items-center justify-end gap-1.5">
-                    <FiClock className="h-3 w-3 text-slate-650" />
+                    <FiClock className="h-3.5 w-3.5 text-slate-650" />
                     {formatDate(item.createdAt)}
                   </div>
                 </td>

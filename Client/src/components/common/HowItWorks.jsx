@@ -35,14 +35,14 @@ const HowItWorks = () => {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="text-center space-y-3 mb-16">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-400">
+        <div className="text-center space-y-4 mb-16">
+          <h2 className="text-sm font-bold uppercase tracking-widest text-indigo-400">
             How It Works
           </h2>
-          <p className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+          <p className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
             The SocialXRay Audit Workflow
           </p>
-          <p className="mx-auto max-w-lg text-xs text-slate-400">
+          <p className="mx-auto max-w-xl text-base text-slate-400 leading-relaxed">
             Verify compliance and visibility ratings through 4 streamlined audit stages.
           </p>
         </div>
@@ -58,20 +58,20 @@ const HowItWorks = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="relative flex flex-col items-center text-center p-4"
+                className="relative flex flex-col items-center text-center p-6 border border-slate-900/40 bg-slate-950/15 rounded-xl hover:border-slate-800 transition-all duration-300 group"
               >
                 {/* Visual Step Number */}
-                <div className="absolute top-0 right-4 text-4xl font-extrabold text-slate-900/30 select-none font-mono">
+                <div className="absolute top-2 right-4 text-6xl font-extrabold text-slate-900/30 select-none font-mono group-hover:text-indigo-950/50 transition-colors duration-300">
                   {step.number}
                 </div>
 
                 {/* Icon Container */}
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 border border-slate-800 text-indigo-400 mb-5 relative z-10">
-                  <Icon className="h-5 w-5" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-slate-900 border border-slate-800 text-indigo-400 mb-6 relative z-10 group-hover:scale-105 transition-transform duration-300">
+                  <Icon className="h-6 w-6" />
                 </div>
 
-                <h3 className="text-sm font-semibold text-slate-200 mb-2 relative z-10">{step.title}</h3>
-                <p className="text-xs text-slate-400 leading-relaxed max-w-[220px] relative z-10">
+                <h3 className="text-lg font-bold text-slate-200 mb-2 relative z-10">{step.title}</h3>
+                <p className="text-base text-slate-400 leading-relaxed max-w-[250px] relative z-10">
                   {step.description}
                 </p>
               </motion.div>

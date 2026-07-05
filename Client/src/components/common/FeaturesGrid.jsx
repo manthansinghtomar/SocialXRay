@@ -41,14 +41,14 @@ const FeaturesGrid = () => {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="text-center space-y-3 mb-16">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-400">
+        <div className="text-center space-y-4 mb-16">
+          <h2 className="text-sm font-bold uppercase tracking-widest text-indigo-400">
             Core Features
           </h2>
-          <p className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+          <p className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
             Exposing Distribution Engines
           </p>
-          <p className="mx-auto max-w-lg text-xs text-slate-400">
+          <p className="mx-auto max-w-xl text-base text-slate-400 leading-relaxed">
             SocialXRay equips you with tools to audit compliance, predict visibility, and analyze feed filters.
           </p>
         </div>
@@ -59,12 +59,12 @@ const FeaturesGrid = () => {
             const Icon = feature.icon;
             return (
               <GlowCard key={feature.title} delay={index * 0.08}>
-                <div className="space-y-4">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-650/10 border border-indigo-500/10 text-indigo-400">
-                    <Icon className="h-4.5 w-4.5" />
+                <div className="space-y-5">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-indigo-650/10 border border-indigo-500/10 text-indigo-400">
+                    <Icon className="h-5.5 w-5.5" />
                   </div>
-                  <h3 className="text-sm font-semibold text-slate-200">{feature.title}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <h3 className="text-lg font-bold text-slate-200">{feature.title}</h3>
+                  <p className="text-base text-slate-400 leading-relaxed">
                     {feature.description}
                   </p>
                 </div>

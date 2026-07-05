@@ -25,24 +25,24 @@ const Sidebar = ({ isOpen, onClose }) => {
         }`}
       >
         {/* Header Branding */}
-        <div className="flex h-16 items-center justify-between px-6 border-b border-slate-900">
+        <div className="flex h-20 items-center justify-between px-6 border-b border-slate-900">
           <div className="flex items-center gap-2">
             <div className="h-5 w-5 rounded bg-gradient-to-tr from-indigo-500 to-cyan-400 shadow-md shadow-indigo-500/20" />
-            <span className="text-base font-bold tracking-tight text-white">
+            <span className="text-lg font-extrabold tracking-tight text-white">
               SocialXRay
             </span>
           </div>
           {/* Mobile close button */}
           <button
             onClick={onClose}
-            className="rounded-lg p-1 text-slate-400 hover:bg-slate-900 hover:text-slate-200 lg:hidden transition-colors"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-900 hover:text-slate-200 lg:hidden transition-colors"
           >
             <FiX className="h-5 w-5" />
           </button>
         </div>
 
         {/* Dynamic Navigation list */}
-        <nav className="flex-1 space-y-1 px-4 py-6 overflow-y-auto">
+        <nav className="flex-1 space-y-1.5 px-4 py-6 overflow-y-auto">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -51,14 +51,14 @@ const Sidebar = ({ isOpen, onClose }) => {
                 to={item.path}
                 onClick={onClose}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-lg px-4 py-2.5 text-xs font-medium transition-all duration-200 ${
+                  `flex items-center gap-3.5 rounded-lg px-5 py-3 text-sm font-semibold transition-all duration-200 ${
                     isActive
-                      ? 'bg-indigo-600/10 text-indigo-400 border-l-2 border-indigo-500 pl-3.5'
+                      ? 'bg-indigo-600/10 text-indigo-400 border-l-2 border-indigo-500 pl-4.5'
                       : 'text-slate-400 hover:bg-slate-900/50 hover:text-slate-200'
                   }`
                 }
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-4.5 w-4.5" />
                 {item.label}
               </NavLink>
             );
@@ -73,9 +73,9 @@ const Sidebar = ({ isOpen, onClose }) => {
               onClose();
               navigate('/', { replace: true });
             }}
-            className="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-xs font-medium text-slate-400 hover:bg-red-950/20 hover:text-red-400 transition-all duration-200 cursor-pointer"
+            className="flex w-full items-center gap-3.5 rounded-lg px-5 py-3 text-sm font-semibold text-slate-400 hover:bg-red-950/20 hover:text-red-400 transition-all duration-200 cursor-pointer"
           >
-            <FiLogOut className="h-4 w-4" />
+            <FiLogOut className="h-4.5 w-4.5" />
             Logout
           </button>
         </div>

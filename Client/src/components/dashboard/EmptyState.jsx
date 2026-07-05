@@ -21,10 +21,10 @@ const EmptyState = () => {
         </div>
       </div>
 
-      <h3 className="text-xl font-bold tracking-tight text-white mb-2">
+      <h3 className="text-2xl font-extrabold tracking-tight text-slate-100 mb-3">
         Diagnostic System Inactive
       </h3>
-      <p className="text-sm text-slate-400 max-w-md mb-8 leading-relaxed">
+      <p className="text-base text-slate-400 max-w-lg mb-10 leading-relaxed">
         No social media feeds or post algorithms have been decrypted yet. Run a diagnostic scan to analyze recommendation mechanics, virality statistics, and risk factors.
       </p>
 

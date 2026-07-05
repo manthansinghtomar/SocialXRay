@@ -23,14 +23,14 @@ const TechStack = () => {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="text-center space-y-3 mb-16">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-400">
+        <div className="text-center space-y-4 mb-16">
+          <h2 className="text-sm font-bold uppercase tracking-widest text-indigo-400">
             System Stack
           </h2>
-          <p className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+          <p className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
             Powering SocialXRay
           </p>
-          <p className="mx-auto max-w-lg text-xs text-slate-400">
+          <p className="mx-auto max-w-xl text-base text-slate-400 leading-relaxed">
             A production-ready stack designed for rapid analysis, policy auditing, and secure MERN deployments.
           </p>
         </div>
@@ -46,13 +46,13 @@ const TechStack = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="group flex flex-col items-center text-center p-4 rounded-xl border border-slate-900/60 bg-slate-950/20 hover:border-slate-800 transition-all duration-300 hover:bg-slate-900/10 cursor-default"
+                className="group flex flex-col items-center text-center p-5 rounded-xl border border-slate-900/60 bg-slate-950/20 hover:border-slate-800 transition-all duration-300 hover:bg-slate-900/10 cursor-default"
               >
-                <div className={`flex h-10 w-10 items-center justify-center rounded-lg bg-slate-950 border border-slate-900 group-hover:border-slate-800 group-hover:scale-105 transition-all duration-300 mb-3 ${tech.color}`}>
-                  <Icon className="h-5 w-5" />
+                <div className={`flex h-12 w-12 items-center justify-center rounded-lg bg-slate-950 border border-slate-900 group-hover:border-slate-800 group-hover:scale-105 transition-all duration-300 mb-3.5 ${tech.color}`}>
+                  <Icon className="h-6 w-6" />
                 </div>
-                <h3 className="text-xs font-semibold text-slate-200">{tech.name}</h3>
-                <span className="text-[10px] text-slate-500 mt-1">{tech.desc}</span>
+                <h3 className="text-sm font-bold text-slate-200">{tech.name}</h3>
+                <span className="text-xs text-slate-500 mt-1.5">{tech.desc}</span>
               </motion.div>
             );
           })}

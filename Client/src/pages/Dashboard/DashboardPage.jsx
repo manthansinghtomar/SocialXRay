@@ -47,7 +47,7 @@ const SENTIMENT_COLORS = {
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="rounded-lg border border-slate-800 bg-slate-950/90 px-3 py-2 text-xs text-slate-200 shadow-xl backdrop-blur-md">
+      <div className="rounded-lg border border-slate-800 bg-slate-950/90 px-3 py-2 text-sm text-slate-200 shadow-xl backdrop-blur-md">
         <span className="font-semibold text-slate-400 capitalize">
           {payload[0].name}:
         </span>{' '}
@@ -153,10 +153,10 @@ const DashboardPage = () => {
   // Render Loader
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-slate-100 tracking-tight">Dashboard Overview</h1>
-          <div className="h-9 w-28 rounded bg-slate-900 animate-pulse" />
+          <h1 className="text-3xl font-extrabold text-slate-100 tracking-tight">Dashboard Overview</h1>
+          <div className="h-10 w-32 rounded bg-slate-900 animate-pulse" />
         </div>
         <LoadingSkeleton />
       </div>
@@ -166,21 +166,23 @@ const DashboardPage = () => {
   // Render Error State
   if (error) {
     return (
-      <div className="flex min-h-[450px] flex-col items-center justify-center text-center p-6 bg-slate-950/20 border border-slate-900 rounded-xl max-w-2xl mx-auto my-8">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-500 mb-4 animate-bounce">
-          <FiAlertTriangle className="h-7 w-7" />
+      <div className="flex min-h-[480px] flex-col items-center justify-center text-center p-8 bg-slate-950/20 border border-slate-900 rounded-xl max-w-2xl mx-auto my-8 space-y-6">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-500 animate-bounce">
+          <FiAlertTriangle className="h-8 w-8" />
         </div>
-        <h3 className="text-lg font-bold text-slate-200 mb-2">
-          Diagnostic System Offline
-        </h3>
-        <p className="text-sm text-slate-400 mb-6 max-w-md">
-          {error}
-        </p>
+        <div>
+          <h3 className="text-xl font-bold text-slate-200 mb-2">
+            Diagnostic System Offline
+          </h3>
+          <p className="text-base text-slate-400 max-w-md">
+            {error}
+          </p>
+        </div>
         <button
           onClick={handleRetry}
-          className="flex items-center gap-2 rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-200 px-5 py-2.5 text-xs font-semibold tracking-wide transition-all duration-200 cursor-pointer"
+          className="flex items-center gap-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-200 px-6 py-3.5 text-sm font-semibold tracking-wide transition-all duration-200 cursor-pointer"
         >
-          <FiRefreshCw className="h-3.5 w-3.5" />
+          <FiRefreshCw className="h-4.5 w-4.5" />
           Retry Connection
         </button>
       </div>
@@ -190,15 +192,15 @@ const DashboardPage = () => {
   // Render Empty Dashboard State (if analyses counts is 0)
   if (!overview || overview.totalAnalyses === 0) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-slate-100 tracking-tight">Dashboard Overview</h1>
+          <h1 className="text-3xl font-extrabold text-slate-100 tracking-tight">Dashboard Overview</h1>
           <button
             onClick={() => fetchDashboardData(true)}
             disabled={refreshing}
-            className="flex items-center gap-2 rounded-lg bg-slate-950 border border-slate-800 hover:border-slate-700/80 px-4 py-2 text-xs font-medium text-slate-300 transition-all duration-200 cursor-pointer disabled:opacity-50"
+            className="flex items-center gap-2 rounded-lg bg-slate-950 border border-slate-800 hover:border-slate-700/80 px-5 py-3 text-sm font-semibold text-slate-300 transition-all duration-200 cursor-pointer disabled:opacity-50"
           >
-            <FiRefreshCw className={`h-3.5 w-3.5 ${refreshing ? 'animate-spin text-indigo-400' : ''}`} />
+            <FiRefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin text-indigo-400' : ''}`} />
             Sync Feeds
           </button>
         </div>
@@ -208,14 +210,14 @@ const DashboardPage = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Dashboard Top Header bar */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 tracking-tight">
+          <h1 className="text-3xl font-extrabold text-slate-100 tracking-tight">
             Dashboard Overview
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-sm text-slate-500 mt-1">
             Diagnostics sync: Active session
           </p>
         </div>
@@ -223,15 +225,15 @@ const DashboardPage = () => {
         <button
           onClick={() => fetchDashboardData(true)}
           disabled={refreshing}
-          className="flex items-center gap-2 rounded-lg bg-slate-950 border border-slate-900 hover:border-indigo-500/30 px-4 py-2.5 text-xs font-semibold text-slate-300 hover:text-indigo-400 transition-all duration-200 cursor-pointer disabled:opacity-50 shadow-md select-none"
+          className="flex items-center gap-2.5 rounded-lg bg-slate-950 border border-slate-900 hover:border-indigo-500/30 px-5 py-3 text-sm font-bold text-slate-300 hover:text-indigo-400 transition-all duration-200 cursor-pointer disabled:opacity-50 shadow-md select-none"
         >
-          <FiRefreshCw className={`h-3.5 w-3.5 ${refreshing ? 'animate-spin text-indigo-400' : ''}`} />
+          <FiRefreshCw className={`h-4.5 w-4.5 ${refreshing ? 'animate-spin text-indigo-400' : ''}`} />
           {refreshing ? 'Syncing...' : 'Sync Database'}
         </button>
       </div>
 
       {/* 9 Cards Overview Grid */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {/* Interactive: Navigate to History */}
         <DashboardCard 
           title="Total Analyses"
@@ -339,6 +341,7 @@ const DashboardPage = () => {
                   outerRadius={75}
                   paddingAngle={2}
                   dataKey="value"
+                  label={{ fontSize: 11, fill: '#cbd5e1' }}
                 >
                   {platformChartData.map((entry, index) => (
                     <Cell 
@@ -353,7 +356,7 @@ const DashboardPage = () => {
                   height={36} 
                   iconType="circle"
                   iconSize={8}
-                  wrapperStyle={{ fontSize: '10px', color: '#cbd5e1', paddingTop: '10px' }}
+                  wrapperStyle={{ fontSize: '13px', color: '#cbd5e1', paddingTop: '10px' }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -380,13 +383,13 @@ const DashboardPage = () => {
                 <XAxis 
                   dataKey="name" 
                   stroke="#475569" 
-                  fontSize={8} 
+                  fontSize={11} 
                   tickLine={false}
                   axisLine={false}
                 />
                 <YAxis 
                   stroke="#475569" 
-                  fontSize={8} 
+                  fontSize={11} 
                   tickLine={false}
                   axisLine={false}
                 />
@@ -423,6 +426,7 @@ const DashboardPage = () => {
                   outerRadius={75}
                   paddingAngle={3}
                   dataKey="value"
+                  label={{ fontSize: 11, fill: '#cbd5e1' }}
                 >
                   {sentimentChartData.map((entry, index) => {
                     const nameLower = entry.name?.toLowerCase() || '';
@@ -440,7 +444,7 @@ const DashboardPage = () => {
                   height={36} 
                   iconType="circle"
                   iconSize={8}
-                  wrapperStyle={{ fontSize: '10px', color: '#cbd5e1', paddingTop: '10px' }}
+                  wrapperStyle={{ fontSize: '13px', color: '#cbd5e1', paddingTop: '10px' }}
                 />
               </PieChart>
             </ResponsiveContainer>
