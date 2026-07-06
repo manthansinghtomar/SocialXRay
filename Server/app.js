@@ -38,9 +38,20 @@ connectDB();
 app.use(helmet());
 
 // 2. CORS: Enable Cross-Origin Resource Sharing with credentials support for frontend client
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://socialxray.netlify.app"
+];
+
 app.use(cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173", // Fallback to default Vite dev port
-    credentials: true // Enable cookie support
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
 }));
 
 // 3. Logger: Morgan HTTP request logger (enabled only in development environment)
